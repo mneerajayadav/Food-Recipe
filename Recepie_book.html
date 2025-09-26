@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Indian Recipe Book</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --dark-color: #292f36;
+      --gray-light: #f9f9f9;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--gray-light);
+      color: var(--dark-color);
+      padding-top: 80px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--dark-color);
+      position: relative;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 4px;
+      background: var(--primary-color);
+      left: 0;
+      bottom: 0;
+      border-radius: 5px;
+    }
+    .navbar {
+      background-color: white;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+      padding: 16px 0;
+      z-index: 10;
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+      color: var(--primary-color) !important;
+      text-decoration: none;
+    }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://i.pinimg.com/1200x/0f/64/8a/0f648a264b8179e13a7c6ff540da4e4f.jpg');
+      background-size: cover;
+      background-position: center;
+      color: #ff6b6b;
+      padding: 140px 0 100px;
+      text-align: center;
+      border-radius: 0 0 35px 35px;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 10px #ff6b6b66;
+    }
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1.2rem;
+      letter-spacing: 4px;
+      color: #ff6b6b;
+      text-shadow: 0 0 10px #ff6b6b66;
+    }
+    .hero p {
+      font-size: 1.4rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      font-weight: 500;
+      color: #ff6b6b;
+      text-shadow: 0 0 10px #ff6b6b66;
+    }
+    .btn-primary {
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 50px;
+      padding: 14px 48px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(255,107,107,0.5);
+      transition: all 0.3s ease;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background-color: #ff5252;
+      box-shadow: 0 8px 25px rgba(255,82,82,0.7);
+      transform: translateY(-4px);
+    }
+    .filter-section {
+      background: white;
+      padding: 20px 40px 40px;
+      border-radius: 30px;
+      box-shadow: 0 8px 35px rgba(255,107,107,0.15);
+      margin-bottom: 50px;
+    }
+    #searchInput {
+      border-radius: 50px;
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 5px 18px rgba(255,107,107,0.3);
+      font-size: 1.1rem;
+      padding: 15px 25px;
+      font-weight: 500;
+      transition: 0.3s ease;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    #searchInput:focus {
+      outline: none;
+      border-color: #ff4c4c;
+      box-shadow: 0 8px 28px rgba(255,76,76,0.6);
+    }
+    .recipe-card {
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 12px 30px rgba(255, 107, 107, 0.20), 0 4px 20px rgba(0, 0, 0, 0.07);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: all 0.3s ease;
+      padding: 0;
+    }
+    .recipe-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 52px rgba(255, 82, 82, 0.35), 0 5px 25px rgba(0, 0, 0, 0.12);
+    }
+    .recipe-img {
+      height: 220px;
+      border-radius: 25px 25px 0 0;
+      background-size: cover;
+      background-position: center center;
+      filter: drop-shadow(0 0 0.2rem rgba(255, 107, 107, 0.4));
+    }
+    .recipe-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 30px 30px;
+    }
+    .recipe-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      letter-spacing: 0.03em;
+      min-height: 2.5em;
+    }
+    .recipe-meta {
+      display: flex;
+      gap: 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .badge {
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      text-transform: capitalize;
+      font-weight: 600;
+      background: linear-gradient(90deg, #ff6b6b 0%, #ffe66d 100%);
+      color: #fff;
+      box-shadow: 0 0 18px #ffa1a1b0;
+      transition: 0.3s ease;
+    }
+    .badge-easy {
+      background: linear-gradient(90deg, #4ecdc4 0%, #2a9d8f 100%);
+      box-shadow: 0 0 16px #4ecdc4aa;
+      color: white;
+    }
+    .badge-medium {
+      background: linear-gradient(90deg, #ffe66d 0%, #f4a261 100%);
+      box-shadow: 0 0 16px #fff3a1aa;
+      color: #444;
+    }
+    .badge-hard {
+      background: linear-gradient(90deg, #ff6b6b 0%, #ea2027 100%);
+      box-shadow: 0 0 16px #ff6b6bcc;
+      color: white;
+    }
+    .recipe-description {
+      font-size: 1.1rem;
+      color: #444;
+      margin-bottom: 24px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      flex-grow: 1;
+      min-height: 3.4em;
+    }
+    .view-recipe-btn {
+      padding: 10px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 60px;
+      color: var(--primary-color);
+      border: 3px solid var(--primary-color);
+      background-color: transparent;
+      transition: all 0.3s ease;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      cursor: pointer;
+    }
+    .view-recipe-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 6px 18px rgba(255, 107, 107, 0.55);
+      transform: translateY(-3px);
+      border-color: var(--primary-color);
+    }
+    #recipeDetail {
+      background: white;
+      border-radius: 30px;
+      padding: 40px 35px;
+      box-shadow: 0 12px 35px rgba(255, 107, 107, 0.15);
+      margin-bottom: 60px;
+    }
+    .recipe-detail-img {
+      height: 450px;
+      border-radius: 30px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+      margin-bottom: 25px;
+    }
+    #detailTitle {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .recipe-meta {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      gap: 12px;
+    }
+    .ingredients-list,
+    .steps-list {
+      padding-left: 24px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .ingredients-list li,
+    .steps-list li {
+      margin-bottom: 14px;
+    }
+    .back-btn {
+      margin-bottom: 40px;
+      border-radius: 50px;
+      padding: 12px 38px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      border: 3px solid var(--primary-color);
+      background-color: transparent;
+      transition: all 0.3s ease;
+      letter-spacing: 0.07em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor:pointer;
+    }
+    .back-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 6px 18px rgba(255, 107, 107, 0.55);
+      transform: translateY(-3px);
+      border-color: var(--primary-color);
+      text-decoration: none;
+    }
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 50px 0 25px;
+      margin-top: 50px;
+      font-size: 0.95rem;
+    }
+    footer p {
+      margin: 0;
+    }
+    .social-icons a {
+      color: white;
+      font-size: 1.7rem;
+      margin-right: 25px;
+      transition: color 0.3s ease;
+      text-decoration: none;
+    }
+    .social-icons a:hover {
+      color: var(--primary-color);
+    }
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      #detailTitle {
+        font-size: 2.2rem;
+      }
+      .recipe-detail-img {
+        height: 300px;
+      }
+    }
+    @media (max-width: 768px) {
+      .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100% !important;
+      }
+    }
+    @media (max-width: 576px) {
+      .hero {
+        padding: 80px 20px 60px;
+      }
+      #searchInput {
+        margin-bottom: 30px;
+      }
+      .recipe-title {
+        font-size: 1.5rem;
+      }
+      .recipe-meta {
+        font-size: 0.9rem;
+        gap: 8px;
+      }
+      .recipe-description {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">Indian Recipe Book</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav"></div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Discover Indian Culinary Delights</h1>
+    <p>Explore authentic Indian dishes with easy-to-follow recipes and stunning visuals.</p>
+    <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
+  </div>
+</section>
+
+<div class="container my-5">
+
+  <section class="filter-section" id="filters">
+    <input type="text" class="form-control" id="searchInput" placeholder="Search recipes..." />
+  </section>
+
+  <section id="recipes" class="mb-5">
+    <h2>Recipe Collection</h2>
+    <div class="row g-4" id="recipesList"></div>
+  </section>
+
+  <section id="recipeDetail" style="display:none;">
+    <a href="#" id="backBtn" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Recipes</a>
+    <div class="recipe-detail">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="recipe-detail-img" id="detailImage"></div>
+        </div>
+        <div class="col-md-6">
+          <h2 id="detailTitle"></h2>
+          <div class="recipe-meta" id="detailMeta"></div>
+          <p id="detailDescription"></p>
+          <h4>Ingredients</h4>
+          <ul class="ingredients-list" id="detailIngredients"></ul>
+        </div>
+        <div class="col-12 mt-4">
+          <h4>Preparation Steps</h4>
+          <ol class="steps-list" id="detailSteps"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <p>© 2025 Indian Recipe Book. All rights reserved.</p>
+    <div class="social-icons">
+      <a href="#" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook"></i></a>
+      <a href="#" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="Pinterest" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+      <a href="#" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const recipes = [
+    {
+      id: 1,
+      title: "Hyderabadi Biryani",
+      description: "Fragrant basmati rice layered with marinated meat and cooked to perfection with spices.",
+      category: "Main",
+      difficulty: "Hard",
+      dietary: "Non-Vegetarian",
+      image: "https://i.pinimg.com/736x/a9/1c/81/a91c81e23516e85e10205a2f3e58bfa8.jpg",
+      ingredients: [
+        "2 cups basmati rice", "500 g chicken", "Yogurt", "Fried onions", "Mint and coriander leaves",
+        "Biryani masala", "Ginger garlic paste", "Saffron soaked in milk", "Oil", "Salt"
+      ],
+      steps: [
+        "Marinate chicken with yogurt and spices.",
+        "Parboil basmati rice with whole spices.",
+        "Layer rice and marinated chicken in a pot.",
+        "Cook on low heat till meat is tender and flavors meld.",
+        "Serve hot garnished with fried onions."
+      ]
+    },
+    {
+      id: 2,
+      title: "Masala Dosa",
+      description: "Crispy rice crepes filled with spicy mashed potatoes.",
+      category: "Breakfast",
+      difficulty: "Medium",
+      dietary: "Vegetarian",
+      image: "https://i.pinimg.com/736x/48/c7/62/48c7623f80f000107f3a6e305abea7f7.jpg",
+      ingredients: [
+        "Dosa batter", "2 boiled potatoes", "1 onion", "1 tsp mustard seeds",
+        "Curry leaves", "Turmeric", "Chopped green chilies", "Salt"
+      ],
+      steps: [
+        "Prepare potato filling with spices.",
+        "Spread dosa batter on hot pan.",
+        "Add potato filling, fold dosa, cook till crisp.",
+        "Serve with chutney and sambar."
+      ]
+    },
+    {
+      id: 3,
+      title: "Chettinad Chicken",
+      description: "Spicy and flavorful South Indian chicken curry with aromatic spices and coconut.",
+      category: "Main",
+      difficulty: "Hard",
+      dietary: "Non-Vegetarian",
+      image: "https://i.pinimg.com/736x/93/48/22/9348229164d4d1896e85f525613a61da.jpg",
+      ingredients: [
+        "500g chicken", "Onions", "Tomatoes", "Coconut grated", "Chettinad masala",
+        "Red chili powder", "Turmeric", "Curry leaves", "Ginger garlic paste", "Oil", "Salt"
+      ],
+      steps: [
+        "Sauté onions, ginger garlic paste and spices.",
+        "Add chicken and cook till tender.",
+        "Add coconut and simmer till gravy thickens.",
+        "Serve hot with rice."
+      ]
+    },
+    {
+      id: 4,
+      title: "Chole Bhature",
+      description: "Spicy chickpea curry served with fried bread.",
+      category: "Main",
+      difficulty: "Hard",
+      dietary: "Vegetarian",
+      image: "https://i.pinimg.com/736x/f5/9c/9a/f59c9a7f63c2cd4bd587f3de73f184a4.jpg",
+      ingredients: [
+        "2 cups chickpeas", "Onions", "Tomatoes", "Ginger garlic paste",
+        "Chole masala", "Flour for bhature", "Oil", "Spices"
+      ],
+      steps: [
+        "Soak and boil chickpeas.",
+        "Prepare spicy onion-tomato gravy.",
+        "Add chickpeas and simmer.",
+        "Make dough and deep fry bhature.",
+        "Serve together hot."
+      ]
+    },
+    {
+      id: 5,
+      title: "Rasam",
+      description: "Tangy and spicy South Indian soup made with tamarind and spices.",
+      category: "Soup",
+      difficulty: "Easy",
+      dietary: "Vegan",
+      image: "https://i.pinimg.com/1200x/fb/7e/83/fb7e83b33a9aef549dd1cd67815a2d93.jpg",
+      ingredients: [
+        "Tamarind", "Tomatoes", "Black pepper", "Cumin", "Mustard seeds",
+        "Garlic", "Curry leaves", "Salt"
+      ],
+      steps: [
+        "Boil tamarind extract with tomatoes and spices.",
+        "Temper mustard seeds, cumin, and curry leaves.",
+        "Add tempering to rasam and serve hot."
+      ]
+    },
+    {
+      id: 6,
+      title: "Gulab Jamun",
+      description: "Soft deep-fried milk dumplings soaked in rose sugar syrup.",
+      category: "Sweet",
+      difficulty: "Medium",
+      dietary: "Vegetarian",
+      image: "https://i.pinimg.com/736x/89/c2/72/89c272ed94146f5c360adbebbea6ed4a.jpg",
+      ingredients: [
+        "Khoya", "Flour", "Milk", "Sugar", "Rose water", "Cardamom powder", "Oil for frying"
+      ],
+      steps: [
+        "Make dough with khoya and flour.",
+        "Shape into balls and deep fry.",
+        "Soak in warm sugar-rose syrup.",
+        "Serve warm or chilled."
+      ]
+    }
+  ];
+
+  function renderRecipes() {
+    const container = $('#recipesList');
+    container.empty();
+    recipes.forEach(recipe => {
+      const difficultyClass = recipe.difficulty.toLowerCase() === 'easy' ? 'badge-easy' : recipe.difficulty.toLowerCase() === 'medium' ? 'badge-medium' : 'badge-hard';
+      const card = `
+        <div class="col-md-4">
+          <div class="recipe-card" tabindex="0" role="button" aria-pressed="false" aria-label="${recipe.title}">
+            <div class="recipe-img" style="background-image: url('${recipe.image}');"></div>
+            <div class="recipe-content">
+              <h3 class="recipe-title">${recipe.title}</h3>
+              <div class="recipe-meta">
+                <span>${recipe.category}</span>
+                <span class="badge ${difficultyClass}">${recipe.difficulty}</span>
+                <span>${recipe.dietary}</span>
+              </div>
+              <p class="recipe-description">${recipe.description}</p>
+              <button class="view-recipe-btn btn btn-primary mt-auto" data-id="${recipe.id}">View Recipe</button>
+            </div>
+          </div>
+        </div>
+      `;
+      container.append(card);
+    });
+    $('.view-recipe-btn').on('click', function() {
+      const id = $(this).data('id');
+      showRecipeDetails(id);
+    });
+  }
+
+  function showRecipeDetails(id) {
+    const recipe = recipes.find(r => r.id == id);
+    if (!recipe) return;
+    $('#recipes').hide();
+    $('#recipeDetail').show();
+    $('#detailImage').css('background-image', `url(${recipe.image})`);
+    $('#detailTitle').text(recipe.title);
+    $('#detailMeta').html(`
+      <span class="me-3"><strong>Category: </strong>${recipe.category}</span>
+      <span class="me-3 badge ${recipe.difficulty.toLowerCase() === 'easy' ? 'badge-easy' : recipe.difficulty.toLowerCase() === 'medium' ? 'badge-medium' : 'badge-hard'}">${recipe.difficulty}</span>
+      <span><strong>Dietary: </strong>${recipe.dietary}</span>
+    `);
+    $('#detailDescription').text(recipe.description);
+    const ingredientsList = $('#detailIngredients').empty();
+    recipe.ingredients.forEach(i => ingredientsList.append(`<li>${i}</li>`));
+    const stepsList = $('#detailSteps').empty();
+    recipe.steps.forEach(s => stepsList.append(`<li>${s}</li>`));
+  }
+
+  $('#backBtn').on('click', function(e) {
+    e.preventDefault();
+    $('#recipeDetail').hide();
+    $('#recipes').show();
+  });
+
+  $('#searchInput').on('input', function() {
+    const val = $(this).val().toLowerCase();
+    const filtered = recipes.filter(r =>
+      r.title.toLowerCase().includes(val) || r.description.toLowerCase().includes(val)
+    );
+    renderRecipes(filtered);
+  });
+
+  $(document).ready(function() {
+    renderRecipes();
+  });
+</script>
+</body>
+</html>
